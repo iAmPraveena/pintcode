@@ -6,8 +6,8 @@ There are 3 arguments required to specify the file:
 3. timer -- Delay to be used between requests. 
 
 ```bash
-python3 main.py --input=inputfile --outfile=output.csv --timer=1*
-whois module is not installed, installing the module*
+python3 main.py --input=inputfile --outfile=output.csv --timer=1
+whois module is not installed, installing the module
 Collecting whois
   Using cached whois-0.9.8-py3-none-any.whl
 Installing collected packages: whois
