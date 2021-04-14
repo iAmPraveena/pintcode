@@ -1,5 +1,9 @@
 # Who is data extractor
-The script searches for the required module if not found installs the module and continues to use the module to fetch the expiration date of the domains. If the specified file is empty the code exits with -1 status prompting the user to specify a correct file.  There are 3 arguments required to specify the file: 1. inputfile -- File containing input domain names, 2. outfile -- File to which the csv data is to be published for later consumption. 3. timer -- Delay to be used between requests. 
+The script searches for the required module if not found installs the module and continues to use the module to fetch the expiration date of the domains. If the specified file is empty the code exits with -1 status prompting the user to specify a correct file.  
+There are 3 arguments required to specify the file: 
+1. inputfile -- File containing input domain names 
+2. outfile -- File to which the csv data is to be published for later consumption
+3. timer -- Delay to be used between requests. 
 
 ```bash
 python3 main.py --input=inputfile --outfile=output.csv --timer=1*
