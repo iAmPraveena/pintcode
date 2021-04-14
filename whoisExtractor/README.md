@@ -1,8 +1,9 @@
-# pintcode
+# Who is data extractor
 The script searches for the required module if not found installs the module and continues to use the module to fetch the expiration date of the domains. If the specified file is empty the code exits with -1 status prompting the user to specify a correct file.  There are 3 arguments required to specify the file: 1. inputfile -- File containing input domain names, 2. outfile -- File to which the csv data is to be published for later consumption. 3. timer -- Delay to be used between requests. 
 
-python3 main.py --input=inputfile --outfile=output.csv --timer=1
-whois module is not installed, installing the module
+```bash
+python3 main.py --input=inputfile --outfile=output.csv --timer=1*
+whois module is not installed, installing the module*
 Collecting whois
   Using cached whois-0.9.8-py3-none-any.whl
 Installing collected packages: whois
@@ -19,4 +20,5 @@ Output written to output.csv
 Note: If you don't intend to use whois module anymore, please run "pip uninstall -y whois"
 blr-mpvf1:FL psuresh$ python3 main.py --input=empty --outfile=output.csv --timer=1
 whois module is installed, proceeding with the execution
-Empty file specified, exiting this run
+Empty file specified, exiting this run *
+```
