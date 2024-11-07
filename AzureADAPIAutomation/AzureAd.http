@@ -1,0 +1,104 @@
+### Request
+# @name token
+# Login to azure ad
+POST https://login.microsoftonline.com/{{tenantName}}.onmicrosoft.com/oauth2/v2.0/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type={{Azuregrant_type}}&client_id={{AzureClientId}}&client_secret={{AzureSecret}}&scope=https://graph.microsoft.com/.default
+
+###
+@accesssToken = {{token.access_token}}
+@tokenType = {{token.token_type}}
+@user-cn = sameer{{$timestamp}}
+@usermail = sameer{{$timestamp}}@{{tenantname}}.onmicrosoft.com
+@group-cn = AzureGroup{{$timestamp}}
+
+###
+# @name users
+# creating a user
+POST {{AzureGraphBase}}/users
+Authorization: {{tokenType}} {{accesssToken}}
+Content-type: application/json
+
+{
+  "accountEnabled": true,
+  "businessPhones": [
+    "9878765415"
+  ],
+  "displayName": "{{user-cn}} Vance",
+  "mailNickname": "{{user-cn}}",
+  "mail": "{{usermail}}",
+  "surname": "dance",
+  "jobTitle": "Expert",
+  "userPrincipalName": "{{usermail}}",
+  "givenName": "{{user-cn}}",
+  "passwordProfile" : {
+    "forceChangePasswordNextSignIn": true,
+    "password": "xWwvJ]6NMw+bWH-d"
+  }
+}
+
+@user-id = {{users.id}}
+###
+# Searching for a user 
+GET {{AzureGraphBase}}/users/{{user-id}}?$select=*
+Authorization: {{tokenType}} {{accesssToken}}
+
+{{
+  test.status(200);
+  test.hasResponseBody();
+}}
+
+
+###
+# @name group
+# creating group
+POST {{AzureGraphBase}}/groups
+Authorization: {{tokenType}} {{accesssToken}}
+Content-type: application/json
+
+{displayName: '{{group-cn}}', securityEnabled: true, mailEnabled: false, mailNickname: '{{group-cn}}', description: '{{group-cn}} desc'}
+
+@groupid = {{group.id}}
+
+###
+
+GET {{AzureGraphBase}}/groups/{{groupid}}/transitivemembers
+Authorization: {{tokenType}} {{accesssToken}}
+ConsistencyLevel: eventual
+###
+GET {{AzureGraphBase}}/users?$filter=(userPrincipalName eq '{{usermail}}')
+Authorization: {{tokenType}} {{accesssToken}}
+###
+POST {{AzureGraphBase}}/groups/{{groupid}}/members/$ref
+Authorization: {{tokenType}} {{accesssToken}}
+Content-type: application/json
+
+{
+  "@odata.id": "{{AzureGraphBase}}/directoryObjects/{{user-id}}"
+}
+###
+GET {{AzureGraphBase}}/groups/{{groupid}}/members
+Authorization: {{tokenType}} {{accesssToken}}
+###
+# Updating group description
+PATCH {{AzureGraphBase}}/groups/{{groupid}}
+Authorization: {{tokenType}} {{accesssToken}}
+Content-type: application/json
+
+{
+  "description": "ren25AzureGroup1725628289798",
+}
+
+GET {{AzureGraphBase}}/organization
+Authorization: {{tokenType}} {{accesssToken}}
+
+###
+#Update jobtitle of the user using patch call
+PATCH {{AzureGraphBase}}/users/{{user-id}}
+Authorization: {{tokenType}} {{accesssToken}}
+Content-type: application/json
+
+{
+    "jobTitle": "Android Dev"
+}
