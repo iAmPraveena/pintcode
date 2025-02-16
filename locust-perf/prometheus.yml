@@ -1,0 +1,14 @@
+scrape_configs:
+- job_name: prometheus_scrapper
+  scrape_interval: 5s
+  static_configs:
+  - targets:
+    - locust-metrics-exporter:9646
+#- job_name: cadvisor
+#  scrape_interval: 5s
+#  static_configs:
+#  - targets:
+- job_name: prometheusclient
+  scrape_interval: 5s
+  static_configs:
+  - targets:
