@@ -1,0 +1,36 @@
+FROM locustio/locust
+
+# Install Python
+USER root
+RUN apt-get update && apt-get install -y python3 python3-pip python3-venv
+RUN apt-get update && apt-get install -y curl
+
+RUN pip install --upgrade pip
+
+# Create a virtual environment in a user directory
+RUN python3 -m venv /usr/local/venv
+
+# Copy requirements.txt to the virtual environment
+COPY requirements.txt /usr/local/venv/
+COPY ep.sh /usr/local/bin/
+COPY entrypoint.sh /usr/local/bin/
+COPY reqs.txt /usr/local/venv/
+
+# Install dependencies in the virtual environment
+RUN /usr/local/venv/bin/pip install --no-cache-dir -r /usr/local/venv/requirements.txt
+RUN /usr/local/venv/bin/pip install --no-cache-dir -r /usr/local/venv/reqs.txt
+
+# Set Python3 as default python
+RUN ln -s /usr/bin/python3 /usr/bin/python
+
+# Set the PATH environment variable
+ENV PATH="/usr/local/venv/bin:$PATH"
+
+# Set the working directory
+WORKDIR /mnt/locust
+
+# Use root user or default locust user
+USER root
+
+# Set the entrypoint script
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
